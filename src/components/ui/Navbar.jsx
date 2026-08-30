@@ -1,5 +1,3 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
 
 const Navbar = () => {
     return (<>
@@ -7,10 +5,9 @@ const Navbar = () => {
             <h2 className="logo">Primo</h2>
             <nav className="links flex gap-5">
                 <div>User: Nishant</div>
-                <button>Logut</button>
+                <button>Logout</button>
             </nav>
         </header>
-        {/* <Outlet /> */}
     </>
     )
 }
