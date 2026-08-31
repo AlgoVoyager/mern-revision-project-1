@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from './components/ui/Sidebar'
 import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'
-import  {tasks} from './utils/data'
+import TaskForm from './components/tasks/TaskForm'
 const App = () => {
+  const [tasks, setTasks] = useState([
+    {
+        id: 1,
+        title: "Learn React",
+        status: "In Progress",
+        priority: "High"
+    },
+    {
+        id: 2,
+        title: "Build MERN Project",
+        status: "Todo",
+        priority: "Medium"
+    },
+    {
+        id: 3,
+        title: "Practice DSA",
+        status: "Done",
+        priority: "Low"
+    }
+  ])
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks}/>
+        <Dashboard tasks={tasks} setTasks={setTasks}/>
+        {/* <TaskForm /> */}
       </div>
     </div>
   )
