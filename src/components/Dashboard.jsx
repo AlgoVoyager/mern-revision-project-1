@@ -11,6 +11,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
     const onEditingTask = (task)=>{
         setEditingTask(task)
     }
+    const onCancelEdit = ()=> setEditingTask(null);
   return (
     <main className='py-5 space-y-4 w-full'>
         <div className="dashboard-hero mb-10 px-10">
@@ -19,7 +20,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
             <h4>{tasks.length} Total Tasks</h4>
         </div>
 
-        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} setEditingTask={setEditingTask} />
+        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit} />
 
         <div className="categories pl-10 flex items-center gap-3 border-y py-1 px-2">
             {categories.map((c)=>(

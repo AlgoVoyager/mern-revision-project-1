@@ -5,7 +5,7 @@ const DEFAULT_FORM = {
     priority: "Medium",
 };
 
-const TaskForm = ({onAddTask, onEditTask, editingTask, setEditingTask}) => {
+const TaskForm = ({onAddTask, onEditTask, editingTask, onCancelEdit}) => {
     const [formData, setFormData] = useState(DEFAULT_FORM);
     useEffect(() => {
         if(editingTask){
@@ -22,7 +22,7 @@ const TaskForm = ({onAddTask, onEditTask, editingTask, setEditingTask}) => {
         }
         if(editingTask){
             onEditTask({id:editingTask.id,...formData});
-            setEditingTask(null);
+            onCancelEdit();
         }else{
 
             const newTask = {
@@ -70,7 +70,7 @@ const TaskForm = ({onAddTask, onEditTask, editingTask, setEditingTask}) => {
             </label>
         </div>
         <input type="submit" value={editingTask?"Update":"Create"} className='btn' />
-        {editingTask&&<button onClick={()=>setEditingTask(null)} className='btn'>Cancel</button>}
+        {editingTask&&<button type='button' onClick={()=>onCancelEdit()} className='btn'>Cancel</button>}
     </form>
   )
 }

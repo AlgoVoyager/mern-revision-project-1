@@ -24,7 +24,6 @@ const App = () => {
         priority: "Low"
     }
   ])
-  useEffect(()=>{console.log(tasks)},[])
   const onAddTask  = (newTask)=>{
         setTasks(p=>[...p,newTask])
   }
