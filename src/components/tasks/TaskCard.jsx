@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TaskCard = ({task,onDeleteTask, onEditingTask}) => {
+const TaskCard = ({task,onDeleteTask, onEditingTask, onStatusChange}) => {
     let task_status_color;
     let priority_color;
     switch (task.status) {
@@ -36,7 +36,7 @@ const TaskCard = ({task,onDeleteTask, onEditingTask}) => {
   return (
     <div className='rounded-xl border hover:shadow-xl duration-100 space-y-2 p-5'>
         <h3 className='py-2 mb-2 text-white'>{task.title}</h3>
-        <div className={`task-status text-sm rounded-md p-1 w-fit ${task_status_color} `}>{task.status}</div>
+        <div className={`task-status text-sm rounded-md p-1 w-fit cursor-pointer ${task_status_color} `} onClick={()=>onStatusChange(task.id)} title='Click to change'>{task.status}</div>
         <div className={"task-priority text-sm rounded-md p-1 w-fit "+priority_color}>{task.priority} Priority</div>
         <button onClick={()=>{onEditingTask(task)}}>✏️</button>
         <button onClick={()=>{onDeleteTask(task.id)}}>🗑️</button>

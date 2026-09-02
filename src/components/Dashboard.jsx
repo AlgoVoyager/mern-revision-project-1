@@ -3,7 +3,7 @@ import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange}) => {
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
@@ -12,7 +12,6 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
         || t.status === selectedCategory;
         const searchMatches = t.title.toLowerCase().includes(searchTerm.toLowerCase());
         return categoryMatches && searchMatches;
-        // return (selectedCategory === "All" || t.status === selectedCategory )&& t.title.toLowerCase().includes(searchTerm.toLowerCase());
     })
 
 
@@ -43,7 +42,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
             <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
         </div>
 
-        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} />
+        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
         <div className="items-count text-center">Showing {filteredTasks.length} Results</div>
     </main>
   )

@@ -24,6 +24,18 @@ const App = () => {
         priority: "Low"
     }
   ])
+  const statuses = ["Todo", "In Progress", "Done"];
+  const onStatusChange = (id) => {
+    const task = tasks.find(t=>t.id==id);
+    const statusIndex = statuses.findIndex(s=>s==task.status);
+    const nextIndex = (statusIndex+1)%statuses.length;
+    setTasks(p=>p.map(t=>{
+      if(t.id==id) return{
+        ...t, status: statuses[nextIndex]
+      }
+      else return t
+    }))
+  }
   const onAddTask  = (newTask)=>{
         setTasks(p=>[...p,newTask])
   }
@@ -40,7 +52,7 @@ const App = () => {
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange}/>
         {/* <TaskForm /> */}
       </div>
     </div>
