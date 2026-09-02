@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 
-const Dashboard = ({tasks, onAddTask, onDeleteTask}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
     const filteredTasks= tasks.filter(t=>selectedCategory==="All" || t.status===selectedCategory)
+
+    const [editingTask, setEditingTask] = useState(null)
+    const onEditingTask = (task)=>{
+        setEditingTask(task)
+    }
   return (
     <main className='py-5 space-y-4 w-full'>
         <div className="dashboard-hero mb-10 px-10">
@@ -14,7 +19,7 @@ const Dashboard = ({tasks, onAddTask, onDeleteTask}) => {
             <h4>{tasks.length} Total Tasks</h4>
         </div>
 
-        <TaskForm onAddTask={onAddTask} />
+        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} setEditingTask={setEditingTask} />
 
         <div className="categories pl-10 flex items-center gap-3 border-y py-1 px-2">
             {categories.map((c)=>(
@@ -23,7 +28,7 @@ const Dashboard = ({tasks, onAddTask, onDeleteTask}) => {
             ))}
         </div>
 
-        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} />
+        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} />
         <div className="items-count text-center">Showing {filteredTasks.length} Results</div>
     </main>
   )

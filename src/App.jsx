@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from './components/ui/Sidebar'
 import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'
@@ -24,19 +24,24 @@ const App = () => {
         priority: "Low"
     }
   ])
+  useEffect(()=>{console.log(tasks)},[])
   const onAddTask  = (newTask)=>{
         setTasks(p=>[...p,newTask])
   }
+  const onEditTask = (updatedTask) => {
+    setTasks(p=>p.map(t=>t.id===updatedTask.id?updatedTask:t))
+  }
   const onDeleteTask = (id)=>{
-    const newTaskList = tasks.filter(t=>t.id!==id)
-    setTasks(newTaskList)
+    setTasks(prevTasks =>
+      prevTasks.filter(task => task.id !== id)
+    );
   }
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onDeleteTask={onDeleteTask}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask}/>
         {/* <TaskForm /> */}
       </div>
     </div>

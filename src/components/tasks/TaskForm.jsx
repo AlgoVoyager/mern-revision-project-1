@@ -1,24 +1,37 @@
-import{useState}from 'react'
+import{useEffect, useState}from 'react'
 const DEFAULT_FORM = {
     title: "",
     status: "Todo",
     priority: "Medium",
 };
 
-const TaskForm = ({onAddTask}) => {
+const TaskForm = ({onAddTask, onEditTask, editingTask, setEditingTask}) => {
     const [formData, setFormData] = useState(DEFAULT_FORM);
+    useEffect(() => {
+        if(editingTask){
+            const {id, ...taskData} = editingTask;
+            setFormData(taskData)
+        }else setFormData(DEFAULT_FORM)
+    }, [editingTask])
+    
     const handleSubmit = (e)=>{
         e.preventDefault();
         if(formData.title.trim()===''){
             alert('title must be filled')
             return;
         }
-        const newTask = {
-            ...formData,
-            id: crypto.randomUUID()
+        if(editingTask){
+            onEditTask({id:editingTask.id,...formData});
+            setEditingTask(null);
+        }else{
+
+            const newTask = {
+                ...formData,
+                id: crypto.randomUUID()
+            }
+            onAddTask(newTask);
+            setFormData(DEFAULT_FORM)
         }
-        onAddTask(newTask);
-        setFormData(DEFAULT_FORM)
 
     }
      const handleChange = (event) => {
@@ -32,7 +45,7 @@ const TaskForm = ({onAddTask}) => {
   return (
     <form className=' flex flex-col justify-center items-center gap-1 py-2 bg-gray-800' 
     onSubmit={handleSubmit}>
-        <h2 className='text-center text-lg py-2'>Create Task</h2>
+        <h2 className='text-center text-lg py-2'>{editingTask?"Edit Task":"Create Task"}</h2>
         <input type="text" name='title' required placeholder='Title' className='p-2 border border-slate-600 rounded-lg' value={formData.title}  onChange={handleChange}/>
         <select name="status" value={formData.status} onChange={handleChange}>
             <option value="In Progress">In Progress</option>
@@ -56,7 +69,8 @@ const TaskForm = ({onAddTask}) => {
                 High
             </label>
         </div>
-        <input type="submit" value="Create" className='btn' />
+        <input type="submit" value={editingTask?"Update":"Create"} className='btn' />
+        {editingTask&&<button onClick={()=>setEditingTask(null)} className='btn'>Cancel</button>}
     </form>
   )
 }

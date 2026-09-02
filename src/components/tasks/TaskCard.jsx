@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TaskCard = ({task,onDeleteTask}) => {
+const TaskCard = ({task,onDeleteTask, onEditingTask}) => {
     let task_status_color;
     let priority_color;
     switch (task.status) {
@@ -38,6 +38,7 @@ const TaskCard = ({task,onDeleteTask}) => {
         <h3 className='py-2 mb-2 text-white'>{task.title}</h3>
         <div className={`task-status text-sm rounded-md p-1 w-fit ${task_status_color} `}>{task.status}</div>
         <div className={"task-priority text-sm rounded-md p-1 w-fit "+priority_color}>{task.priority} Priority</div>
+        <button onClick={()=>{onEditingTask(task)}}>✏️</button>
         <button onClick={()=>{onDeleteTask(task.id)}}>🗑️</button>
     </div>
   )
