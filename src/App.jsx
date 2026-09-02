@@ -24,12 +24,15 @@ const App = () => {
         priority: "Low"
     }
   ])
+  const onAddTask  = (newTask)=>{
+        setTasks(p=>[...p,newTask])
+    }
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} setTasks={setTasks}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask}/>
         {/* <TaskForm /> */}
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 
-const Dashboard = ({tasks, setTasks}) => {
+const Dashboard = ({tasks, onAddTask}) => {
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
     const filteredTasks= tasks.filter(t=>selectedCategory==="All" || t.status===selectedCategory)
@@ -14,7 +14,7 @@ const Dashboard = ({tasks, setTasks}) => {
             <h4>{tasks.length} Total Tasks</h4>
         </div>
 
-        <TaskForm setTasks={setTasks} />
+        <TaskForm onAddTask={onAddTask} />
 
         <div className="categories pl-10 flex items-center gap-3 border-y py-1 px-2">
             {categories.map((c)=>(
