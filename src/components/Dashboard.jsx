@@ -7,7 +7,14 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
-    const filteredTasks= tasks.filter(t=>(t.title.toLowerCase()).includes(searchTerm.toLowerCase()) && selectedCategory==="All" || (t.status===selectedCategory))
+    const filteredTasks= tasks.filter(t=>{
+        const categoryMatches = selectedCategory === "All" 
+        || t.status === selectedCategory;
+        const searchMatches = t.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return categoryMatches && searchMatches;
+        // return (selectedCategory === "All" || t.status === selectedCategory )&& t.title.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+
 
     const [editingTask, setEditingTask] = useState(null)
     const onEditingTask = (task)=>{
