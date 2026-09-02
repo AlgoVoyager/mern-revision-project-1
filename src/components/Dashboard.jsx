@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
+import SearchTask from './tasks/SearchTask';
 
 const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
+    const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
-    const filteredTasks= tasks.filter(t=>selectedCategory==="All" || t.status===selectedCategory)
+    const filteredTasks= tasks.filter(t=>(t.title.toLowerCase()).includes(searchTerm.toLowerCase()) && selectedCategory==="All" || (t.status===selectedCategory))
 
     const [editingTask, setEditingTask] = useState(null)
     const onEditingTask = (task)=>{
         setEditingTask(task)
     }
     const onCancelEdit = ()=> setEditingTask(null);
+    const onSearchChange = (e) => {
+        e.preventDefault()
+        setsearchTerm(e.target.value);
+    }
   return (
     <main className='py-5 space-y-4 w-full'>
         <div className="dashboard-hero mb-10 px-10">
@@ -27,6 +33,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask}) => {
                 <button onClick={()=>setSelectedCategory(c)} key={c} 
                 className={`px-2 rounded-lg border text-sm ${c==selectedCategory&&'bg-gray-700 text-white'}`}>{c}</button>
             ))}
+            <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
         </div>
 
         <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} />
