@@ -45,13 +45,20 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange})
         <div className="categories pl-10 flex items-center gap-3 border-y py-1 px-2">
             {categories.map((c)=>(
                 <button onClick={()=>setSelectedCategory(c)} key={c} 
-                className={`px-2 rounded-lg border text-sm ${c==selectedCategory&&'bg-gray-700 text-white'}`}>{c} ({c!=='All'?stats[c]:tasks.length})</button>
+                className={`px-2 rounded-lg border text-sm ${c===selectedCategory&&'bg-gray-700 text-white'}`}>{c} ({c!=='All'?stats[c]:tasks.length})</button>
             ))}
             <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
         </div>
 
         <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
-        <div className="items-count text-center">Showing {filteredTasks.length} Results</div>
+        <div className="items-count text-center">
+            {tasks.length === 0
+            ?"No Tasks Added yet."
+            :(filteredTasks.length === 0
+            ?"Try changing your search or filters."
+            :`Showing ${filteredTasks.length} Results`)
+            }
+        </div>
     </main>
   )
 }
