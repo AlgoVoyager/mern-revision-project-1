@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 
-const Dashboard = ({tasks, onAddTask}) => {
+const Dashboard = ({tasks, onAddTask, onDeleteTask}) => {
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
     const filteredTasks= tasks.filter(t=>selectedCategory==="All" || t.status===selectedCategory)
@@ -23,7 +23,7 @@ const Dashboard = ({tasks, onAddTask}) => {
             ))}
         </div>
 
-        <TaskList tasks={filteredTasks} />
+        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} />
         <div className="items-count text-center">Showing {filteredTasks.length} Results</div>
     </main>
   )

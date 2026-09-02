@@ -26,13 +26,17 @@ const App = () => {
   ])
   const onAddTask  = (newTask)=>{
         setTasks(p=>[...p,newTask])
-    }
+  }
+  const onDeleteTask = (id)=>{
+    const newTaskList = tasks.filter(t=>t.id!==id)
+    setTasks(newTaskList)
+  }
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onDeleteTask={onDeleteTask}/>
         {/* <TaskForm /> */}
       </div>
     </div>

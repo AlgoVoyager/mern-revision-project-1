@@ -1,12 +1,12 @@
 import{useState}from 'react'
+const DEFAULT_FORM = {
+    title: "",
+    status: "Todo",
+    priority: "Medium",
+};
 
 const TaskForm = ({onAddTask}) => {
-    const defaultForm = {
-        title: "",
-        status: "Todo",
-        priority: "Medium",
-    }
-    const [formData, setFormData] = useState(defaultForm);
+    const [formData, setFormData] = useState(DEFAULT_FORM);
     const handleSubmit = (e)=>{
         e.preventDefault();
         if(formData.title.trim()===''){
@@ -17,9 +17,8 @@ const TaskForm = ({onAddTask}) => {
             ...formData,
             id: crypto.randomUUID()
         }
-        console.log(newTask)
         onAddTask(newTask);
-        setFormData(defaultForm)
+        setFormData(DEFAULT_FORM)
 
     }
      const handleChange = (event) => {
