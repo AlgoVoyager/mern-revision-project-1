@@ -9,7 +9,7 @@ const App = () => {
   const [deletedTaskIds, setDeletedTaskIds] = useState([]);
   const onUndoDelete = (id)=>{
     clearTimeout(timersRef.current[id]);
-    setDeletedTaskIds(p=>p.filter(i=>i!=id))
+    setDeletedTaskIds(p=>p.filter(i=>i!==id))
     delete timersRef.current[id];
   }
   const [tasks, setTasks] = useState(()=>{
@@ -26,7 +26,7 @@ const App = () => {
     const statusIndex = statuses.findIndex(s=>s==task.status);
     const nextIndex = (statusIndex+1)%statuses.length;
     setTasks(p=>p.map(t=>{
-      if(t.id==id) return{
+      if(t.id===id) return{
         ...t, status: statuses[nextIndex]
       }
       else return t
@@ -42,8 +42,8 @@ const App = () => {
   const onDeleteTask = (id)=>{
     setDeletedTaskIds(p=>[...p,id]);
     timersRef.current[id] = setTimeout(() => {
-      setTasks(p=>p.filter(t=>t.id!==id))
-      setDeletedTaskIds(p=>p.filter(t=>t!=id))
+      // setTasks(p=>p.filter(t=>t.id!==id))
+      setDeletedTaskIds(p=>p.filter(t=>t!==id))
       delete timersRef.current[id];
     }, 5000);
   }

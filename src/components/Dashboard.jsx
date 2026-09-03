@@ -52,7 +52,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, 
         setsearchTerm(e.target.value);
     }
     const getTrimmedTitle =(id) => {
-        const title = tasks.find(t=>t.id==id).title;
+        const title = tasks.find(t=>t.id===id).title;
         return title.length>8?title.substring(0,8)+"...":title;
     }
   return (
@@ -81,7 +81,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, 
         </div>
         {deletedTaskIds.length>0&&
             deletedTaskIds.map((id)=>(
-                <div className="message bg-blue-950 text-white py-1 relative fade-1">
+                <div key={id} className="message bg-blue-950 text-white py-1 relative fade-1">
                     <div className="loader-line"></div> 
                     <div className="flex items-center gap-5 px-5">
                         <p>Task {getTrimmedTitle(id)} Deleted</p> 
