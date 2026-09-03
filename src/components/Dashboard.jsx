@@ -22,6 +22,20 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange})
         return categoryMatches && searchMatches;
     })
 
+    const priorityOrder = {
+        High:3,
+        Medium:2,
+        Low:1
+    }
+    const [sortBy, setSortBy] = useState("Newest")
+    const sortedTasks = [...filteredTasks].sort((a,b)=>{
+        if(sortBy==="Newest") return a;
+        else if(sortBy==="Oldest") return b;
+        else
+            return priorityOrder[b.priority]-priorityOrder[a.priority]}
+    );
+    console.log(sortedTasks)
+
 
     const [editingTask, setEditingTask] = useState(null)
     const onEditingTask = (task)=>{
@@ -42,15 +56,22 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange})
 
         <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit} />
 
-        <div className="categories pl-10 flex items-center gap-3 border-y py-1 px-2">
-            {categories.map((c)=>(
-                <button onClick={()=>setSelectedCategory(c)} key={c} 
-                className={`px-2 rounded-lg border text-sm ${c===selectedCategory&&'bg-gray-700 text-white'}`}>{c} ({c!=='All'?stats[c]:tasks.length})</button>
-            ))}
+        <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
+            <div className="categories  flex justify-between items-center gap-3">
+                {categories.map((c)=>(
+                    <button onClick={()=>setSelectedCategory(c)} key={c} 
+                    className={`px-2 rounded-lg border text-sm ${c===selectedCategory&&'bg-gray-700 text-white'}`}>{c} ({c!=='All'?stats[c]:tasks.length})</button>
+                ))}
+            </div>
             <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
+            <select name="sorting" value={sortBy} onChange={(e)=>setSortBy(e.target.value)} className='px-2 rounded-lg border text-sm'>
+                <option value="Newest">Newest</option>
+                <option value="Oldest">Oldest</option>
+                <option value="Priority">Priority</option>
+            </select>
         </div>
 
-        <TaskList tasks={filteredTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
+        <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
         <div className="items-count text-center">
             {tasks.length === 0
             ?"No Tasks Added yet."

@@ -9,13 +9,13 @@ const App = () => {
         id: 1,
         title: "Learn React",
         status: "In Progress",
-        priority: "High"
+        priority: "Medium"
     },
     {
         id: 2,
         title: "Build MERN Project",
         status: "Todo",
-        priority: "Medium"
+        priority: "High"
     },
     {
         id: 3,
