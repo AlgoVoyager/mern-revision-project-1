@@ -3,7 +3,7 @@ import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -59,7 +59,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange})
             <h4>{tasks.length} Total Tasks</h4>
         </div>
 
-        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit} />
+        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit}  isTaskLimitReached={isTaskLimitReached}/>
 
         <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
             <div className="categories  flex justify-between items-center gap-3">

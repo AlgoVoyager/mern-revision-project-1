@@ -67,7 +67,10 @@ body {
   box-sizing: border-box; */
 }
 .btn{
-  @apply px-2 py-1 border rounded-lg hover:shadow-xl hover:bg-white/10 cursor-pointer
+  @apply px-2 py-1 border rounded-lg hover:shadow-xl hover:bg-white/10 cursor-pointer;
+}
+.btn-disabled{
+  @apply opacity-25 hover:bg-white/0
 }
 h1,
 h2 {

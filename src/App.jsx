@@ -4,10 +4,12 @@ import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'
 import TaskForm from './components/tasks/TaskForm'
 const App = () => {
+  const MAX_TASK = 10;
   const [tasks, setTasks] = useState(()=>{
     const storedTasks = localStorage.getItem("tasks");
     return storedTasks?JSON.parse(storedTasks):[];
   })
+  const isTaskLimitReached = tasks.length >= MAX_TASK;
   useEffect(()=>{
     localStorage.setItem('tasks',JSON.stringify(tasks));
   },[tasks])
@@ -24,7 +26,8 @@ const App = () => {
     }))
   }
   const onAddTask  = (newTask)=>{
-        setTasks(p=>[...p,newTask])
+    if(isTaskLimitReached) return alert("maximum tasks limit reached.")
+    setTasks(p=>[...p,newTask])
   }
   const onEditTask = (updatedTask) => {
     setTasks(p=>p.map(t=>t.id===updatedTask.id?updatedTask:t))
@@ -39,7 +42,7 @@ const App = () => {
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
         {/* <TaskForm /> */}
       </div>
     </div>
