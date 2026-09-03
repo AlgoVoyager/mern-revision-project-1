@@ -4,8 +4,11 @@ import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 import DeleteNotifications from './tasks/DeleteNotifications';
 import TaskListFooter from './tasks/TaskListFooter';
+import { useContext } from 'react';
+import {TaskContext} from '../context/TaskContext'
 
-const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, onDeleteTask, onStatusChange, isTaskLimitReached }) => {
+const Dashboard = () => {
+    const {tasks, deletedTaskIds, onUndoDelete} = useContext(TaskContext)
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -63,7 +66,7 @@ const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete,
                 <h4>{tasks.length} Total Tasks</h4>
             </div>
 
-            <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit} isTaskLimitReached={isTaskLimitReached} />
+            <TaskForm editingTask={editingTask} onCancelEdit={onCancelEdit}/>
 
             <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
                 <div className="categories  flex justify-between items-center gap-3">
@@ -80,7 +83,7 @@ const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete,
                 </select>
             </div>
             <DeleteNotifications tasks={tasks} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
-            <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange} />
+            <TaskList tasks={sortedTasks} onEditingTask={onEditingTask}/>
             <TaskListFooter tasksLength={tasksLength} filteredLength={filteredLength} />
         </main>
     )

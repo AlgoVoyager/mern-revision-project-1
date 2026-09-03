@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { TaskContext } from '../../context/TaskContext';
 
-const TaskCard = ({task,onDeleteTask, onEditingTask, onStatusChange}) => {
+const TaskCard = ({task, onEditingTask}) => {
+    const {onDeleteTask, onStatusChange} = useContext(TaskContext)
     let task_status_color;
     let priority_color;
     switch (task.status) {
