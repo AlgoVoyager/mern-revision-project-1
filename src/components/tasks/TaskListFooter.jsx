@@ -1,4 +1,3 @@
-import React from 'react'
 
 const TaskListFooter = ({ tasksLength, filteredLength }) => {
     return <div className="items-count text-center">

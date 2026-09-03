@@ -5,6 +5,7 @@ import SearchTask from './tasks/SearchTask';
 import DeleteNotifications from './tasks/DeleteNotifications';
 import TaskListFooter from './tasks/TaskListFooter';
 import {useTaskContext} from '../context/TaskContext'
+import { TASK_CATEGORIES } from '../constants/taskConstants';
 
 const Dashboard = () => {
     const {tasks, deletedTaskIds, onUndoDelete} = useTaskContext()
@@ -18,7 +19,6 @@ const Dashboard = () => {
     });
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
-    const categories = ["All", "Todo", "In Progress", "Done"];
     const filteredTasks = tasks.filter(t => {
         const categoryMatches = selectedCategory === "All"
             || t.status === selectedCategory;
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
             <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
                 <div className="categories  flex justify-between items-center gap-3">
-                    {categories.map((c) => (
+                    {TASK_CATEGORIES.map((c) => (
                         <button onClick={() => setSelectedCategory(c)} key={c}
                             className={`px-2 rounded-lg border text-sm ${c === selectedCategory && 'bg-gray-700 text-white'}`}>{c} ({c !== 'All' ? stats[c] : tasks.length})</button>
                     ))}

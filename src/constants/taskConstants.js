@@ -16,3 +16,9 @@ export const PRIORITY_ORDER = {
   Medium: 2,
   Low: 1
 };
+
+export const DEFAULT_FORM = {
+    title: "",
+    status: "Todo",
+    priority: "Medium",
+};
