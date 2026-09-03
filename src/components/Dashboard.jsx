@@ -28,12 +28,17 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange})
         Low:1
     }
     const [sortBy, setSortBy] = useState("Newest")
-    const sortedTasks = [...filteredTasks].sort((a,b)=>{
-        if(sortBy==="Newest") return a;
-        else if(sortBy==="Oldest") return b;
-        else
-            return priorityOrder[b.priority]-priorityOrder[a.priority]}
-    );
+    const sortedTasks = [...filteredTasks].sort((a, b) => {
+        if (sortBy === "Newest") {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+
+        if (sortBy === "Oldest") {
+            return new Date(a.createdAt) - new Date(b.createdAt);
+        }
+
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+    });
     console.log(sortedTasks)
 
 

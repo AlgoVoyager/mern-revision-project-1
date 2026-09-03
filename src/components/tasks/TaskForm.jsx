@@ -27,7 +27,8 @@ const TaskForm = ({onAddTask, onEditTask, editingTask, onCancelEdit}) => {
 
             const newTask = {
                 ...formData,
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                createdAt : new Date().toISOString()
             }
             onAddTask(newTask);
             setFormData(DEFAULT_FORM)

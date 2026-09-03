@@ -35,7 +35,7 @@ const TaskCard = ({task,onDeleteTask, onEditingTask, onStatusChange}) => {
     }
   return (
     <div className='rounded-xl border hover:shadow-xl duration-100 space-y-2 p-5'>
-        <h3 className='py-2 mb-2 text-white'>{task.id}. {task.title}</h3>
+        <h3 className='py-2 mb-2 text-white'>{task.title}</h3>
         <div className={`task-status text-sm rounded-md p-1 w-fit cursor-pointer ${task_status_color} `} onClick={()=>onStatusChange(task.id)} title='Click to change'>{task.status}</div>
         <div className={"task-priority text-sm rounded-md p-1 w-fit "+priority_color}>{task.priority} Priority</div>
         <button onClick={()=>{onEditingTask(task)}}>✏️</button>
