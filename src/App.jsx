@@ -6,6 +6,9 @@ import TaskForm from './components/tasks/TaskForm'
 const App = () => {
   const MAX_TASK = 10;
   const [deletedTaskId, setDeletedTaskId] = useState(null);
+  const onUndoDelete = ()=>{
+    setDeletedTaskId(null)
+  }
   const [tasks, setTasks] = useState(()=>{
     const storedTasks = localStorage.getItem("tasks");
     return storedTasks?JSON.parse(storedTasks):[];
@@ -37,21 +40,21 @@ const App = () => {
     setDeletedTaskId(id);
   }
   useEffect(()=>{
+    if (deletedTaskId === null) return;
     const t = setTimeout(() => {
       setTasks(prevTasks =>
         prevTasks.filter(task => task.id !== deletedTaskId)
       );
-      setDeletedTaskId(null);
+      onUndoDelete();
     }, 5000);
     return ()=>clearTimeout(t);
   },[deletedTaskId])
-  useEffect(()=>{console.log(tasks)},tasks)
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskId={deletedTaskId} setDeletedTaskId={setDeletedTaskId} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskId={deletedTaskId} onUndoDelete={onUndoDelete} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
         {/* <TaskForm /> */}
       </div>
     </div>

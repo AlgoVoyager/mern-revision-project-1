@@ -3,7 +3,7 @@ import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, setDeletedTaskId, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, onUndoDelete, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -75,11 +75,11 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, setDeletedTaskI
                 <option value="Priority">Priority</option>
             </select>
         </div>
-        {deletedTaskId&&<div className="message bg-blue-950 text-white py-1 relative">
+        {deletedTaskId&&<div className="message bg-blue-950 text-white py-1 relative fade-1">
             <div className="loader-line"></div> 
             <div className="flex items-center gap-5 px-5">
                 <p>Task Deleted </p> 
-                <button className='btn text-sm' onClick={()=>setDeletedTaskId(null)}>Undo</button>
+                <button className='btn text-sm' onClick={()=>onUndoDelete()}>Undo</button>
             </div>    
         </div>}
 
