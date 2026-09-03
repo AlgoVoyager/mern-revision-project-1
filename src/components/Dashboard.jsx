@@ -4,7 +4,6 @@ import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 import DeleteNotifications from './tasks/DeleteNotifications';
 import TaskListFooter from './tasks/TaskListFooter';
-import { useContext } from 'react';
 import {useTaskContext} from '../context/TaskContext'
 
 const Dashboard = () => {
