@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from './components/ui/Sidebar'
 import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'
 import TaskForm from './components/tasks/TaskForm'
 const App = () => {
   const MAX_TASK = 10;
-  const [deletedTaskId, setDeletedTaskId] = useState(null);
-  const onUndoDelete = ()=>{
-    setDeletedTaskId(null)
+  const timersRef = useRef({});
+  const [deletedTaskIds, setDeletedTaskIds] = useState([]);
+  const onUndoDelete = (id)=>{
+    clearTimeout(timersRef.current[id]);
+    setDeletedTaskIds(p=>p.filter(i=>i!=id))
+    delete timersRef.current[id];
   }
   const [tasks, setTasks] = useState(()=>{
     const storedTasks = localStorage.getItem("tasks");
@@ -37,24 +40,19 @@ const App = () => {
     setTasks(p=>p.map(t=>t.id===updatedTask.id?updatedTask:t))
   }
   const onDeleteTask = (id)=>{
-    setDeletedTaskId(id);
-  }
-  useEffect(()=>{
-    if (deletedTaskId === null) return;
-    const t = setTimeout(() => {
-      setTasks(prevTasks =>
-        prevTasks.filter(task => task.id !== deletedTaskId)
-      );
-      onUndoDelete();
+    setDeletedTaskIds(p=>[...p,id]);
+    timersRef.current[id] = setTimeout(() => {
+      setTasks(p=>p.filter(t=>t.id!==id))
+      setDeletedTaskIds(p=>p.filter(t=>t!=id))
+      delete timersRef.current[id];
     }, 5000);
-    return ()=>clearTimeout(t);
-  },[deletedTaskId])
+  }
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskId={deletedTaskId} onUndoDelete={onUndoDelete} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskIds={deletedTaskIds} onUndoDelete={onUndoDelete} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
         {/* <TaskForm /> */}
       </div>
     </div>

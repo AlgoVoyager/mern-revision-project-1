@@ -3,7 +3,7 @@ import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, onUndoDelete, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -19,7 +19,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, onUndoDelete, o
         const categoryMatches = selectedCategory === "All" 
         || t.status === selectedCategory;
         const searchMatches = t.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const notDeleting = deletedTaskId!==t.id;
+        const notDeleting =!deletedTaskIds.includes(t.id);
         return categoryMatches && searchMatches && notDeleting;
     })
 
@@ -51,6 +51,10 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, onUndoDelete, o
         e.preventDefault()
         setsearchTerm(e.target.value);
     }
+    const getTrimmedTitle =(id) => {
+        const title = tasks.find(t=>t.id==id).title;
+        return title.length>8?title.substring(0,8)+"...":title;
+    }
   return (
     <main className='py-1 w-full'>
         <div className="dashboard-hero mb-10 px-10">
@@ -75,13 +79,17 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, onUndoDelete, o
                 <option value="Priority">Priority</option>
             </select>
         </div>
-        {deletedTaskId&&<div className="message bg-blue-950 text-white py-1 relative fade-1">
-            <div className="loader-line"></div> 
-            <div className="flex items-center gap-5 px-5">
-                <p>Task Deleted </p> 
-                <button className='btn text-sm' onClick={()=>onUndoDelete()}>Undo</button>
-            </div>    
-        </div>}
+        {deletedTaskIds.length>0&&
+            deletedTaskIds.map((id)=>(
+                <div className="message bg-blue-950 text-white py-1 relative fade-1">
+                    <div className="loader-line"></div> 
+                    <div className="flex items-center gap-5 px-5">
+                        <p>Task {getTrimmedTitle(id)} Deleted</p> 
+                        <button className='btn text-sm' onClick={()=>onUndoDelete(id)}>Undo</button>
+                    </div>    
+                </div>
+            ))
+        }
 
         <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
         <div className="items-count text-center">
