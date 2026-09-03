@@ -113,3 +113,20 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.loader-line{
+  background-color: red;
+  height: 3px;
+  width:0px;
+  position: absolute;
+  top:0;left:0;
+  animation: 5s ease-out loader1;
+}
+@keyframes loader1 {
+  from{
+    width:0
+  }
+  to{
+    width:100%
+  }
+}

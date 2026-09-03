@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard'
 import TaskForm from './components/tasks/TaskForm'
 const App = () => {
   const MAX_TASK = 10;
+  const [deletedTaskId, setDeletedTaskId] = useState(null);
   const [tasks, setTasks] = useState(()=>{
     const storedTasks = localStorage.getItem("tasks");
     return storedTasks?JSON.parse(storedTasks):[];
@@ -33,16 +34,24 @@ const App = () => {
     setTasks(p=>p.map(t=>t.id===updatedTask.id?updatedTask:t))
   }
   const onDeleteTask = (id)=>{
-    setTasks(prevTasks =>
-      prevTasks.filter(task => task.id !== id)
-    );
+    setDeletedTaskId(id);
   }
+  useEffect(()=>{
+    const t = setTimeout(() => {
+      setTasks(prevTasks =>
+        prevTasks.filter(task => task.id !== deletedTaskId)
+      );
+      setDeletedTaskId(null);
+    }, 5000);
+    return ()=>clearTimeout(t);
+  },[deletedTaskId])
+  useEffect(()=>{console.log(tasks)},tasks)
   return (
     <div className='h-full'>
       <Navbar />
       <div className='flex'>
         <Sidebar />
-        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
+        <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskId={deletedTaskId} setDeletedTaskId={setDeletedTaskId} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
         {/* <TaskForm /> */}
       </div>
     </div>

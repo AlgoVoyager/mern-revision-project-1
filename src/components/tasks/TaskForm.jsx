@@ -6,6 +6,7 @@ const DEFAULT_FORM = {
 };
 
 const TaskForm = ({onAddTask, onEditTask, editingTask, onCancelEdit, isTaskLimitReached}) => {
+    const isCreateDisabled = !editingTask && isTaskLimitReached;
     const [formData, setFormData] = useState(DEFAULT_FORM);
     useEffect(() => {
         if(editingTask){
@@ -70,7 +71,7 @@ const TaskForm = ({onAddTask, onEditTask, editingTask, onCancelEdit, isTaskLimit
                 High
             </label>
         </div>
-        <input type="submit" value={editingTask?"Update":"Create"} disabled={!editingTask&&isTaskLimitReached} className={'btn btn-disabled'} />
+        <input type="submit" value={editingTask?"Update":"Create"} disabled={isCreateDisabled} className={`btn ${isCreateDisabled&&'btn-disabled'}`} />
         {editingTask&&<button type='button' onClick={()=>onCancelEdit()} className='btn'>Cancel</button>}
     </form>
   )

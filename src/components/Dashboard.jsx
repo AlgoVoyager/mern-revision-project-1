@@ -3,7 +3,7 @@ import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
+const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskId, setDeletedTaskId, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -19,7 +19,8 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange, 
         const categoryMatches = selectedCategory === "All" 
         || t.status === selectedCategory;
         const searchMatches = t.title.toLowerCase().includes(searchTerm.toLowerCase());
-        return categoryMatches && searchMatches;
+        const notDeleting = deletedTaskId!==t.id;
+        return categoryMatches && searchMatches && notDeleting;
     })
 
     const priorityOrder = {
@@ -39,7 +40,6 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange, 
 
         return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
-    console.log(sortedTasks)
 
 
     const [editingTask, setEditingTask] = useState(null)
@@ -52,7 +52,7 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange, 
         setsearchTerm(e.target.value);
     }
   return (
-    <main className='py-5 space-y-4 w-full'>
+    <main className='py-1 w-full'>
         <div className="dashboard-hero mb-10 px-10">
             <h1 className='my-10'>Project Dashboard</h1>
             <h2>Good Morning,  Nishant</h2>
@@ -75,6 +75,13 @@ const Dashboard = ({tasks, onAddTask, onEditTask, onDeleteTask, onStatusChange, 
                 <option value="Priority">Priority</option>
             </select>
         </div>
+        {deletedTaskId&&<div className="message bg-blue-950 text-white py-1 relative">
+            <div className="loader-line"></div> 
+            <div className="flex items-center gap-5 px-5">
+                <p>Task Deleted </p> 
+                <button className='btn text-sm' onClick={()=>setDeletedTaskId(null)}>Undo</button>
+            </div>    
+        </div>}
 
         <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
         <div className="items-count text-center">
