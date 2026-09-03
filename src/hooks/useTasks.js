@@ -46,4 +46,14 @@ export const useTasks = () => {
         setDeletedTaskIds(p=>p.filter(i=>i!==id))
         delete timersRef.current[id];
     }
+    return {
+        tasks,
+        deletedTaskIds,
+        isTaskLimitReached,
+        onAddTask,
+        onEditTask,
+        onStatusChange,
+        onDeleteTask,
+        onUndoDelete
+    };
 };

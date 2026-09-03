@@ -85,7 +85,7 @@ const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete,
             </div>
             <DeleteNotifications getTrimmedTitle={getTrimmedTitle} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
             <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange} />
-            <TaskListFooter tasksLength={TaskList} filteredLength={filteredLength} />
+            <TaskListFooter tasksLength={tasksLength} filteredLength={filteredLength} />
         </main>
     )
 }
