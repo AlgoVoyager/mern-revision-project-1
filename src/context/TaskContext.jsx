@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import { useTasks } from "../hooks/useTasks";
 export const TaskContext = createContext();
-
 const TaskProvider  = ({children}) =>{
     const taskValue  = useTasks();
 
@@ -12,3 +11,7 @@ const TaskProvider  = ({children}) =>{
     )
 }
 export default TaskProvider;
+
+export const useTaskContext = () => {
+  return useContext(TaskContext);
+};

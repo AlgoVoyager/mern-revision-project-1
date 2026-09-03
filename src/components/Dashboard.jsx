@@ -5,10 +5,10 @@ import SearchTask from './tasks/SearchTask';
 import DeleteNotifications from './tasks/DeleteNotifications';
 import TaskListFooter from './tasks/TaskListFooter';
 import { useContext } from 'react';
-import {TaskContext} from '../context/TaskContext'
+import {useTaskContext} from '../context/TaskContext'
 
 const Dashboard = () => {
-    const {tasks, deletedTaskIds, onUndoDelete} = useContext(TaskContext)
+    const {tasks, deletedTaskIds, onUndoDelete} = useTaskContext()
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -82,7 +82,7 @@ const Dashboard = () => {
                     <option value="Priority">Priority</option>
                 </select>
             </div>
-            <DeleteNotifications tasks={tasks} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
+            <DeleteNotifications />
             <TaskList tasks={sortedTasks} onEditingTask={onEditingTask}/>
             <TaskListFooter tasksLength={tasksLength} filteredLength={filteredLength} />
         </main>

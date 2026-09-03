@@ -1,6 +1,8 @@
 import React from 'react'
+import { useTaskContext } from '../../context/TaskContext';
 
-const DeleteNotifications = ({deletedTaskIds, onUndoDelete, tasks}) => {
+const DeleteNotifications = () => {
+    const {tasks, deletedTaskIds, onUndoDelete} = useTaskContext()
     const getTrimmedTitle = (id) => {
         const title = tasks.find(t => t.id === id).title;
         return title.length > 8 ? title.substring(0, 8) + "..." : title;

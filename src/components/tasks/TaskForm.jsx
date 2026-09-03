@@ -1,6 +1,6 @@
 import{useEffect, useState}from 'react'
 import { useContext } from 'react';
-import { TaskContext } from '../../context/TaskContext';
+import { useTaskContext } from '../../context/TaskContext';
 const DEFAULT_FORM = {
     title: "",
     status: "Todo",
@@ -8,7 +8,7 @@ const DEFAULT_FORM = {
 };
 
 const TaskForm = ({editingTask, onCancelEdit}) => {
-    const {onAddTask, onEditTask, isTaskLimitReached} = useContext(TaskContext)
+    const {onAddTask, onEditTask, isTaskLimitReached} = useTaskContext()
     const isCreateDisabled = !editingTask && isTaskLimitReached;
     const [formData, setFormData] = useState(DEFAULT_FORM);
     useEffect(() => {
