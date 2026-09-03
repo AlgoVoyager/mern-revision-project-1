@@ -1,4 +1,3 @@
-import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from './components/ui/Sidebar'
 import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'

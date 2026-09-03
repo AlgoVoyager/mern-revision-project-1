@@ -55,10 +55,6 @@ const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete,
         e.preventDefault()
         setsearchTerm(e.target.value);
     }
-    const getTrimmedTitle = (id) => {
-        const title = tasks.find(t => t.id === id).title;
-        return title.length > 8 ? title.substring(0, 8) + "..." : title;
-    }
     return (
         <main className='py-1 w-full'>
             <div className="dashboard-hero mb-10 px-10">
@@ -83,7 +79,7 @@ const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete,
                     <option value="Priority">Priority</option>
                 </select>
             </div>
-            <DeleteNotifications getTrimmedTitle={getTrimmedTitle} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
+            <DeleteNotifications tasks={tasks} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
             <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange} />
             <TaskListFooter tasksLength={tasksLength} filteredLength={filteredLength} />
         </main>

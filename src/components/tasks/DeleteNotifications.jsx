@@ -1,6 +1,10 @@
 import React from 'react'
 
-const DeleteNotifications = ({deletedTaskIds, onUndoDelete, getTrimmedTitle}) => {
+const DeleteNotifications = ({deletedTaskIds, onUndoDelete, tasks}) => {
+    const getTrimmedTitle = (id) => {
+        const title = tasks.find(t => t.id === id).title;
+        return title.length > 8 ? title.substring(0, 8) + "..." : title;
+    }
     return (
         deletedTaskIds.length > 0 &&
         deletedTaskIds.map((id) => (
