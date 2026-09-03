@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import TaskList from './tasks/TaskList';
 import TaskForm from './tasks/TaskForm';
 import SearchTask from './tasks/SearchTask';
+import DeleteNotifications from './tasks/DeleteNotifications';
+import TaskListFooter from './tasks/TaskListFooter';
 
-const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, onDeleteTask, onStatusChange,  isTaskLimitReached}) => {
+const Dashboard = ({ tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, onDeleteTask, onStatusChange, isTaskLimitReached }) => {
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -15,18 +17,20 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, 
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const categories = ["All", "Todo", "In Progress", "Done"];
-    const filteredTasks= tasks.filter(t=>{
-        const categoryMatches = selectedCategory === "All" 
-        || t.status === selectedCategory;
+    const filteredTasks = tasks.filter(t => {
+        const categoryMatches = selectedCategory === "All"
+            || t.status === selectedCategory;
         const searchMatches = t.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const notDeleting =!deletedTaskIds.includes(t.id);
+        const notDeleting = !deletedTaskIds.includes(t.id);
         return categoryMatches && searchMatches && notDeleting;
     })
+    const tasksLength = tasks.length;
+    const filteredLength = filteredTasks.length;
 
     const priorityOrder = {
-        High:3,
-        Medium:2,
-        Low:1
+        High: 3,
+        Medium: 2,
+        Low: 1
     }
     const [sortBy, setSortBy] = useState("Newest")
     const sortedTasks = [...filteredTasks].sort((a, b) => {
@@ -43,65 +47,48 @@ const Dashboard = ({tasks, onAddTask, onEditTask, deletedTaskIds, onUndoDelete, 
 
 
     const [editingTask, setEditingTask] = useState(null)
-    const onEditingTask = (task)=>{
+    const onEditingTask = (task) => {
         setEditingTask(task)
     }
-    const onCancelEdit = ()=> setEditingTask(null);
+    const onCancelEdit = () => setEditingTask(null);
     const onSearchChange = (e) => {
         e.preventDefault()
         setsearchTerm(e.target.value);
     }
-    const getTrimmedTitle =(id) => {
-        const title = tasks.find(t=>t.id===id).title;
-        return title.length>8?title.substring(0,8)+"...":title;
+    const getTrimmedTitle = (id) => {
+        const title = tasks.find(t => t.id === id).title;
+        return title.length > 8 ? title.substring(0, 8) + "..." : title;
     }
-  return (
-    <main className='py-1 w-full'>
-        <div className="dashboard-hero mb-10 px-10">
-            <h1 className='my-10'>Project Dashboard</h1>
-            <h2>Good Morning,  Nishant</h2>
-            <h4>{tasks.length} Total Tasks</h4>
-        </div>
-
-        <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit}  isTaskLimitReached={isTaskLimitReached}/>
-
-        <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
-            <div className="categories  flex justify-between items-center gap-3">
-                {categories.map((c)=>(
-                    <button onClick={()=>setSelectedCategory(c)} key={c} 
-                    className={`px-2 rounded-lg border text-sm ${c===selectedCategory&&'bg-gray-700 text-white'}`}>{c} ({c!=='All'?stats[c]:tasks.length})</button>
-                ))}
+    return (
+        <main className='py-1 w-full'>
+            <div className="dashboard-hero mb-10 px-10">
+                <h1 className='my-10'>Project Dashboard</h1>
+                <h2>Good Morning,  Nishant</h2>
+                <h4>{tasks.length} Total Tasks</h4>
             </div>
-            <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
-            <select name="sorting" value={sortBy} onChange={(e)=>setSortBy(e.target.value)} className='px-2 rounded-lg border text-sm'>
-                <option value="Newest">Newest</option>
-                <option value="Oldest">Oldest</option>
-                <option value="Priority">Priority</option>
-            </select>
-        </div>
-        {deletedTaskIds.length>0&&
-            deletedTaskIds.map((id)=>(
-                <div key={id} className="message bg-blue-950 text-white py-1 relative fade-1">
-                    <div className="loader-line"></div> 
-                    <div className="flex items-center gap-5 px-5">
-                        <p>Task {getTrimmedTitle(id)} Deleted</p> 
-                        <button className='btn text-sm' onClick={()=>onUndoDelete(id)}>Undo</button>
-                    </div>    
-                </div>
-            ))
-        }
 
-        <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange}/>
-        <div className="items-count text-center">
-            {tasks.length === 0
-            ?"No Tasks Added yet."
-            :(filteredTasks.length === 0
-            ?"Try changing your search or filters."
-            :`Showing ${filteredTasks.length} Results`)
-            }
-        </div>
-    </main>
-  )
+            <TaskForm onAddTask={onAddTask} onEditTask={onEditTask} editingTask={editingTask} onCancelEdit={onCancelEdit} isTaskLimitReached={isTaskLimitReached} />
+
+            <div className="filter-bar pl-10 flex justify-between items-center gap-3 border-y py-1 px-2">
+                <div className="categories  flex justify-between items-center gap-3">
+                    {categories.map((c) => (
+                        <button onClick={() => setSelectedCategory(c)} key={c}
+                            className={`px-2 rounded-lg border text-sm ${c === selectedCategory && 'bg-gray-700 text-white'}`}>{c} ({c !== 'All' ? stats[c] : tasks.length})</button>
+                    ))}
+                </div>
+                <SearchTask searchTerm={searchTerm} onSearchChange={onSearchChange} />
+                <select name="sorting" value={sortBy} onChange={(e) => setSortBy(e.target.value)} className='px-2 rounded-lg border text-sm'>
+                    <option value="Newest">Newest</option>
+                    <option value="Oldest">Oldest</option>
+                    <option value="Priority">Priority</option>
+                </select>
+            </div>
+            <DeleteNotifications getTrimmedTitle={getTrimmedTitle} onUndoDelete={onUndoDelete} deletedTaskIds={deletedTaskIds} />
+            <TaskList tasks={sortedTasks} onDeleteTask={onDeleteTask} onEditingTask={onEditingTask} onStatusChange={onStatusChange} />
+            <TaskListFooter tasksLength={TaskList} filteredLength={filteredLength} />
+        </main>
+    )
 }
+
 
 export default Dashboard

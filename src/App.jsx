@@ -42,7 +42,7 @@ const App = () => {
   const onDeleteTask = (id)=>{
     setDeletedTaskIds(p=>[...p,id]);
     timersRef.current[id] = setTimeout(() => {
-      // setTasks(p=>p.filter(t=>t.id!==id))
+      setTasks(p=>p.filter(t=>t.id!==id))
       setDeletedTaskIds(p=>p.filter(t=>t!==id))
       delete timersRef.current[id];
     }, 5000);
@@ -53,7 +53,6 @@ const App = () => {
       <div className='flex'>
         <Sidebar />
         <Dashboard tasks={tasks} onAddTask={onAddTask} onEditTask={onEditTask} deletedTaskIds={deletedTaskIds} onUndoDelete={onUndoDelete} onDeleteTask={onDeleteTask} onStatusChange={onStatusChange} isTaskLimitReached={isTaskLimitReached}/>
-        {/* <TaskForm /> */}
       </div>
     </div>
   )
