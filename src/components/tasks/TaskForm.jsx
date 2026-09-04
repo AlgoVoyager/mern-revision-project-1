@@ -1,6 +1,10 @@
 import{useEffect, useState}from 'react'
 import { useTaskContext } from '../../context/TaskContext';
-import { DEFAULT_FORM } from '../../constants/taskConstants';
+const DEFAULT_FORM = {
+    title: "",
+    status: "Todo",
+    priority: "Medium",
+};
 
 const TaskForm = ({editingTask, onCancelEdit}) => {
     const {onAddTask, onEditTask, isTaskLimitReached} = useTaskContext()

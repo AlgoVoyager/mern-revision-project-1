@@ -8,7 +8,7 @@ import {useTaskContext} from '../context/TaskContext'
 import { TASK_CATEGORIES } from '../constants/taskConstants';
 
 const Dashboard = () => {
-    const {tasks, deletedTaskIds, onUndoDelete} = useTaskContext()
+    const {tasks, deletedTaskIds} = useTaskContext()
     const stats = tasks.reduce((acc, task) => {
         acc[task.status]++;
         return acc;
@@ -17,6 +17,7 @@ const Dashboard = () => {
         "In Progress": 0,
         Done: 0
     });
+    const completionPercentage = (stats.Done/tasks.length)*100
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const filteredTasks = tasks.filter(t => {
@@ -59,10 +60,21 @@ const Dashboard = () => {
     }
     return (
         <main className='py-1 w-full'>
-            <div className="dashboard-hero mb-10 px-10">
-                <h1 className='my-10'>Project Dashboard</h1>
-                <h2>Good Morning,  Nishant</h2>
-                <h4>{tasks.length} Total Tasks</h4>
+            <div className="dashboard-hero flex justify-between mb-10 px-10">
+                <div className="info-left w-1/2">
+                    <h1 className='my-10'>Project Dashboard</h1>
+                    <h2>Good Morning,  Nishant</h2>
+                </div>
+                <div className="info-right w-1/2 flex flex-wrap gap-5 items-center justify-end">
+                    <div className="info-card-primary">
+                        <h3 className="info-value">{tasks.length}</h3>
+                        <p className="info-des">Total Tasks</p>
+                    </div>
+                    <div className="info-card-success">
+                        <h3 className="info-value">{completionPercentage}%</h3>
+                        <p className="info-des">Completed</p>
+                    </div>
+                </div>
             </div>
 
             <TaskForm editingTask={editingTask} onCancelEdit={onCancelEdit}/>
