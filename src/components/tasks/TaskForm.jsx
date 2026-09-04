@@ -4,6 +4,7 @@ const DEFAULT_FORM = {
     title: "",
     status: "Todo",
     priority: "Medium",
+    dueDate:new Intl.DateTimeFormat('en-CA').format(new Date(Date.now() + 24 * 60 * 60 * 1000))
 };
 
 const TaskForm = ({editingTask, onCancelEdit}) => {
@@ -16,7 +17,6 @@ const TaskForm = ({editingTask, onCancelEdit}) => {
             setFormData(taskData)
         }else setFormData(DEFAULT_FORM)
     }, [editingTask])
-    
     const handleSubmit = (e)=>{
         e.preventDefault();
         if(formData.title.trim()===''){
@@ -73,6 +73,12 @@ const TaskForm = ({editingTask, onCancelEdit}) => {
                 High
             </label>
         </div>
+        <input
+            type="date"
+            name="dueDate"
+            value={formData.dueDate}
+            onChange={handleChange}
+        />
         <input type="submit" value={editingTask?"Update":"Create"} disabled={isCreateDisabled} className={`btn ${isCreateDisabled&&'btn-disabled'}`} />
         {editingTask&&<button type='button' onClick={()=>onCancelEdit()} className='btn'>Cancel</button>}
     </form>

@@ -17,7 +17,10 @@ const Dashboard = () => {
         "In Progress": 0,
         Done: 0
     });
-    const completionPercentage = (stats.Done/tasks.length)*100
+    const completionPercentage =
+    tasks.length > 0
+        ? Math.round((stats.Done / tasks.length) * 100)
+        : 0;
     const [searchTerm, setsearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
     const filteredTasks = tasks.filter(t => {
