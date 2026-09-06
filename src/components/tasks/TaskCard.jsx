@@ -49,13 +49,38 @@ const TaskCard = ({task, onEditingTask}) => {
 const DisplayDate = ({mode, dateval})=>{
     if(!dateval) return;
     const dateString = new Date(dateval).toDateString();
-    const isToday = dateString==new Date().toDateString();
-    const isTommorow = new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString()===new Date(dateval).toLocaleDateString()
+    let toDisplay = "";
+    if(mode==="due"){
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const dueDate = new Date(dateval);
+        dueDate.setHours(0, 0, 0, 0);
+        const differenceInDays =  (dueDate - today) / 86400000;
+    
+        if (differenceInDays < 0) {
+            const days = Math.abs(differenceInDays);
+            toDisplay = `Overdue by ${days} ${days === 1 ? "Day" : "Days"}`;
+        // overdue
+        } else if (differenceInDays === 0) {
+            toDisplay = `Today`
+        // today
+        } else if (differenceInDays === 1) {
+            toDisplay = "Tomorrow"
+        // tomorrow
+        } else {
+            toDisplay = `Due in ${differenceInDays} Days`
+        // due in X days
+        }
+    }else{
+        toDisplay=dateString===new Date().toDateString()?"Today":dateString;
+    }
+    
+
     return(
         <div className="displayDate">
             <div className='text-center border border-primary text-primary-200 bg-primary-800 rounded-md w-fit mx-auto px-1 text-xs'>
                 <div className='text-[0.5rem] w-fit mx-auto leading-2'>{mode=="due"?"Due Date":"Created"}</div>
-                {isToday?"Today":isTommorow?"Tommorow":dateString}
+                {toDisplay}
             </div>
         </div>
     )

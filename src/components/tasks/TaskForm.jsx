@@ -4,7 +4,7 @@ const DEFAULT_FORM = {
     title: "",
     status: "Todo",
     priority: "Medium",
-    dueDate:new Intl.DateTimeFormat('en-CA').format(new Date(Date.now() + 24 * 60 * 60 * 1000))
+    dueDate:""
 };
 
 const TaskForm = ({editingTask, onCancelEdit}) => {
