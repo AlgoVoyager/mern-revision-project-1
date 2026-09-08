@@ -1,8 +1,12 @@
+require("dotenv").config();
 const express = require('express')
 const cors = require('cors')
-const taskRouter = require('./routes/task')
+const taskRouter = require('./routes/task');
+const mongoConnection = require("./config/db");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
+
+mongoConnection();
 
 app.use(cors());
 app.use(express.json());
