@@ -22,6 +22,22 @@ const getTaskById = async (req, res) => {
         return res.status(400).json({message:"Task not found!"})         
     }
 }
+const updateTaskById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const body = req.body;
+        if(!id || !body) return res.status(400).json({"message":"Details not provided"})
+        const updatedTask = await Task.findByIdAndUpdate(
+            id,
+            body,
+            {
+                new: true
+            }
+        )
+    } catch (error) {
+        return res.status(400).json({message:"Task not found!"})         
+    }
+}
 const createTask = async (req, res) => {
     const body = req.body;
     try{
@@ -40,5 +56,5 @@ const createTask = async (req, res) => {
 
 }
 module.exports = {
-    createTask, getTasks, getTaskById
+    createTask, getTasks, getTaskById, updateTaskById
 }
