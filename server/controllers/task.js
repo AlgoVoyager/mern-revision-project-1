@@ -1,9 +1,14 @@
 const Task = require('../models/Task')
+const checkId = async (req, res, next) =>{
+    const id = req.params.id;
+    if(!id) return res.status(400).json({message:"Task id not found"}) 
+}
 const getTasks = async (req, res) => {
     try {
         const tasks = await Task.find({});
         return res.status(200).json({
-            tasks
+            tasks,
+            length:tasks.length
         })
     } catch (error) {
         return res.status(500).json({
@@ -30,10 +35,9 @@ const updateTaskById = async (req, res) => {
         const updatedTask = await Task.findByIdAndUpdate(
             id,
             body,
-            {
-                new: true
-            }
+            { returnDocument: 'after' }
         )
+        return res.status(201).json({task:updatedTask})
     } catch (error) {
         return res.status(400).json({message:"Task not found!"})         
     }
@@ -55,6 +59,24 @@ const createTask = async (req, res) => {
     }
 
 }
+const deleteTask = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if(!id) return res.status(400).json({"message":"Details not provided"})
+        const task = await Task.findByIdAndDelete(id);    
+        if (!task) {
+            return res.status(404).json({
+                message: "Task not found"
+            });
+        }
+        return res.status(200).json({"message":"Task Deleted Successfully"})
+    }catch(e){
+        const errors = e.errors;
+        return res.status(400).json({
+            "message":  errors[Object.keys(errors)[0]].message,
+        })
+    }
+}
 module.exports = {
-    createTask, getTasks, getTaskById, updateTaskById
+    createTask, getTasks, getTaskById, updateTaskById, deleteTask
 }
