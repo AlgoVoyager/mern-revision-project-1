@@ -37,7 +37,7 @@ const updateTaskById = async (req, res) => {
             body,
             { returnDocument: 'after' }
         )
-        return res.status(201).json({task:updatedTask})
+        return res.status(200).json({task:updatedTask})
     } catch (error) {
         return res.status(400).json({message:"Task not found!"})         
     }
