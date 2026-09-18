@@ -45,7 +45,10 @@ const updateTaskById = async (req, res) => {
 const createTask = async (req, res) => {
     const body = req.body;
     try{
-        const task = await Task.create(body);
+        const task = await Task.create({
+            ...body,
+            userId: req.user.userId
+        });
 
         return res.status(201).json({
             "message": "Task created",
