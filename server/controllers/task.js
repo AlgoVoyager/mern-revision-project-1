@@ -5,7 +5,9 @@ const checkId = async (req, res, next) =>{
 }
 const getTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({});
+        const tasks = await Task.find({
+            userId:req.user.userId
+        });
         return res.status(200).json({
             tasks,
             length:tasks.length
@@ -20,7 +22,10 @@ const getTaskById = async (req, res) => {
     try {
         const id = req.params.id;
         if(!id) return res.status(400).json({message:"Task id not found"}) 
-        const task = await Task.findById(id);
+        const task = await Task.findOne({
+            _id:id, 
+            userId:req.user.userId
+        });
         if(!task) return res.status(404).json({message:"Task not found!"})
             return res.status(200).json(task);
     } catch (error) {
@@ -31,12 +36,18 @@ const updateTaskById = async (req, res) => {
     try {
         const id = req.params.id;
         const body = req.body;
-        if(!id || !body) return res.status(400).json({"message":"Details not provided"})
-        const updatedTask = await Task.findByIdAndUpdate(
-            id,
-            body,
+        if(!id) return res.status(400).json({"message":"Details not provided"})
+        const updatedTask = await Task.findOneAndUpdate(
+           { 
+            _id: id,
+            userId:req.user.userId
+           },
+           body,
             { returnDocument: 'after' }
         )
+        if (!updatedTask) {
+            return res.status(404).json({ message: "Task not found" });
+        }
         return res.status(200).json({task:updatedTask})
     } catch (error) {
         return res.status(400).json({message:"Task not found!"})         
@@ -57,7 +68,7 @@ const createTask = async (req, res) => {
     }catch(e){
         const errors = e.errors;
         return res.status(400).json({
-            "message":  errors[Object.keys(errors)[0]].message,
+            "message":  e,
         })
     }
 
@@ -66,7 +77,10 @@ const deleteTask = async (req, res) => {
     try {
         const id = req.params.id;
         if(!id) return res.status(400).json({"message":"Details not provided"})
-        const task = await Task.findByIdAndDelete(id);    
+        const task = await Task.findOneAndDelete({
+            _id:id,
+            userId: req.user.userId
+        });    
         if (!task) {
             return res.status(404).json({
                 message: "Task not found"
@@ -76,7 +90,7 @@ const deleteTask = async (req, res) => {
     }catch(e){
         const errors = e.errors;
         return res.status(400).json({
-            "message":  errors[Object.keys(errors)[0]].message,
+            "message": "Bad request",
         })
     }
 }
