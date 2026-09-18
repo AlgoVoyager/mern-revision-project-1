@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const mongoose = require('mongoose')
 const bcrypt = require('bcrypt');
 const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.user.userId);
-        const {password, ...userDetails} = user;
+        if(!user) return res.status(404).json({message:"User not found"})
+        const {password, ...userDetails} = user.toObject();
         return res.status(200).json({user:userDetails});
     } catch (error) {
         return res.status(500).json({message:"Internal server error"})
