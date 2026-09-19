@@ -18,14 +18,12 @@ export const UserProvider = ({children}) => {
             if(!response.ok){ 
                 return null; 
             }
-            const userData = await response.json();
-            setUser(userData.user);
-            return
+            const userData = (await response.json()).user;
+            setUser(userData);
+            return userData;
         } catch (error) {
-            console.error(error)
-            setUser(null);
-            return null;
-            return false;
+            console.error(error);
+            return null; 
         } finally {
             setLoading(false);
         }
@@ -57,9 +55,20 @@ export const UserProvider = ({children}) => {
             const token = data.token;
             localStorage.setItem('token',token);
             const result = await fetchUser(token);
-            if(!result){
-
+            if (result === false) {
+                return {
+                    success: false,
+                    message: "Authentication failed"
+                };
             }
+
+            if (result === null) {
+                return {
+                    success: false,
+                    message: "Something went wrong"
+                };
+            }
+
             return { success: true };
         } catch (error) {
             console.log(error)

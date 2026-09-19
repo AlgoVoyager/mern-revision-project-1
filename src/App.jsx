@@ -1,20 +1,22 @@
 import Sidebar from './components/ui/Sidebar'
 import Navbar from './components/ui/Navbar'
 import Dashboard from './components/Dashboard'
-import { useTasks } from './hooks/useTasks'
 import TaskProvider from './context/TaskContext'
+import UserProvider from './context/UserContext'
 const App = () => {
   
   return (
-    <TaskProvider >
-      <div className='h-full'>
-        <Navbar />
-        <div className='flex'>
-          <Sidebar />
-          <Dashboard />
+    <UserProvider >
+      <TaskProvider >
+        <div className='h-full'>
+          <Navbar />
+          <div className='flex'>
+            <Sidebar />
+            <Dashboard />
+          </div>
         </div>
-      </div>
-    </TaskProvider>
+      </TaskProvider>
+    </UserProvider>
   )
 }
 
