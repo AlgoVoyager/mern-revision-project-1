@@ -10,13 +10,22 @@ export const UserProvider = ({children}) => {
                     'Authorization' : `Bearer ${token}`
                 }
             })
-            if(!response.ok) throw new Error("Authentiction failed")
+            if(response.status===401){
+                setUser(null);
+                localStorage.removeItem("token");
+                return false;
+            }
+            if(!response.ok){ 
+                return null; 
+            }
             const userData = await response.json();
             setUser(userData.user);
+            return
         } catch (error) {
             console.error(error)
             setUser(null);
-            localStorage.removeItem("token");
+            return null;
+            return false;
         } finally {
             setLoading(false);
         }
@@ -30,21 +39,34 @@ export const UserProvider = ({children}) => {
                     headers : {
                         'Content-Type': 'application/json'
                     },
-                    body: {
+                    body: JSON.stringify({
                         email,
                         password
-                    }
+                    })
                 }
             )
+            const data = await response.json();
             if(!response.ok) {
+                setUser(null);
+                console.log("login failed");
+                return {
+                    success: false,
+                    message: data.message
+                };
+            }
+            const token = data.token;
+            localStorage.setItem('token',token);
+            const result = await fetchUser(token);
+            if(!result){
 
             }
-            const data = await response.json();
-            const token = data.user.token;
-            localStorage.setItem('token',token);
-            fetchUser(token);
+            return { success: true };
         } catch (error) {
             console.log(error)
+            return {
+                success: false,
+                message: "Something went wrong"
+            };
         }
     }
     const userValue ={
@@ -54,10 +76,12 @@ export const UserProvider = ({children}) => {
     };
     
     useEffect(()=>{
-        const token = localStorage.getItem('token');
-        console.log(token);
-        if(token) fetchUser(token);
-        else setLoading(false);
+        async function initializeAuth() {
+            const token = localStorage.getItem('token');
+            if(token) await fetchUser(token);
+            else setLoading(false);
+        }
+        initializeAuth();
     },[])
 
     
