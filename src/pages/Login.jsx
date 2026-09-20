@@ -7,11 +7,10 @@ const defaultForm = {
 }
 
 const Login = () => {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const {user, loading, login} = useUserContext();
     const [loginLoading, setLoginLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    if (user) return <Navigate to="/" replace />;
     const [loginForm, setLoginForm] = useState(defaultForm)
     const handleChange = (event) => {
         const { name, value } = event.target; 
@@ -37,7 +36,8 @@ const Login = () => {
         }, 5000);
         return ()=> clearTimeout(timeout)
     },[errorMessage])
-  return (
+    if (user) return <Navigate to="/" replace />;
+    return (
     <main className='w-full flex justify-center items-center'>
         <form onSubmit={handleSubmit} className='p-5 rounded-xl border flex flex-col gap-2 '>
             <h3>Login</h3>

@@ -78,10 +78,16 @@ export const UserProvider = ({children}) => {
             };
         }
     }
+    const logout = async () =>{
+        setUser(null)
+        localStorage.removeItem('token')
+        setLoading(false)
+    }
     const userValue ={
         user,
         loading,
-        login
+        login,
+        logout
     };
     
     useEffect(()=>{
