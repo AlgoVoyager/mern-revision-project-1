@@ -1,19 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import { MAX_TASKS, TASK_STATUSES } from "../constants/taskConstants";
+import { useUserContext } from "../context/UserContext"
+import { getTasks } from "../api/tasks";
 export const useTasks = () => {
+    const {user, loading} = useUserContext();
     const [tasks, setTasks] = useState(()=>{
         const storedTasks = localStorage.getItem("tasks");
         return storedTasks?JSON.parse(storedTasks):[];
       })
+    const [errorMessage, seterrorMessage] = useState(null)
 
-      const [deletedTaskIds, setDeletedTaskIds] = useState([]);
-      const timersRef = useRef({});
-      
-      const isTaskLimitReached = tasks.length >= MAX_TASKS;
+    const [deletedTaskIds, setDeletedTaskIds] = useState([]);
+    const timersRef = useRef({});
+    
+    const isTaskLimitReached = tasks.length >= MAX_TASKS;
 
+    useEffect(() => {
+        if(loading) return;
+        if(!user){
+            setTasks([]);
+            return;
+        }
+        async function fetchTasks() {
+            try {
+                const taskList = await getTasks();
+                setTasks(taskList.tasks);
+                seterrorMessage(null)
+            } catch (error) {
+                seterrorMessage("Failed to load tasks");
+                console.error(error);
+            }
+        }
+        fetchTasks();
+    }, [user, loading]);
     useEffect(()=>{
         localStorage.setItem('tasks',JSON.stringify(tasks));
     },[tasks])
+
 
     const onAddTask  = (newTask)=>{
         if(isTaskLimitReached) return alert("maximum tasks limit reached.")
@@ -50,6 +73,7 @@ export const useTasks = () => {
         tasks,
         deletedTaskIds,
         isTaskLimitReached,
+        errorMessage,
         onAddTask,
         onEditTask,
         onStatusChange,
